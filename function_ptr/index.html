@@ -1,0 +1,21 @@
+<!doctype html>
+<html>
+<script>
+  var Module = {
+    print: (text) => {
+      console.log(text);
+    },
+    printErr: (text) => {
+      console.log(text);
+    },
+    onRuntimeInitialized: function () {
+	const instance = new Module.MyObject();
+	console.log(instance.Execute(2));
+	const result = Module.add(2, 3, v => v * 2);
+	console.log(result); // 10
+    }
+  };
+</script>
+<script src="main.js"></script>
+
+</html>
