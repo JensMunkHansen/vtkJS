@@ -36,12 +36,13 @@
         __destruct: function() {
             this.__parent.__destruct.call(this);
         },
-        invoke: function() {
+        invoke: function(str) {
             // your code goes here - how to get the string?
+	    console.log('extends: ' + str);
         },
       });
       var derivedClass = new DerivedClass;
-
+      derivedClass.invoke("Derived");
       var x = {
           invoke: function(str) {
               console.log('invoking with: ' + str);
@@ -49,6 +50,10 @@
       };
       var interfaceObject = Module.Interface.implement(x);
       interfaceObject.invoke("Hello");
+	var MyCallback = Module.vtkCallbackCommand.extend("vtkCallbackCommand", {
+	    Execute: function(caller, ev, callData) {
+	    }
+	});
     }
   };
 </script>

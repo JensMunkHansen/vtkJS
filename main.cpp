@@ -115,13 +115,14 @@ public:
 private:
   // vtkCallbackCommandWrapper()  {} /* How to explicitly initialize base class */
 };
-vtkStandardNewMacro(vtkCallbackCommandWrapper);
+
+//vtkStandardNewMacro(vtkCallbackCommandWrapper);
 
 
 vtkAddDestructor(vtkCallbackCommand);
 // Does this cause double deletion
-vtkAddDestructor(emscripten::wrapper<vtkCallbackCommand>);
-vtkAddDestructor(vtkCallbackCommandWrapper);
+//vtkAddDestructor(emscripten::wrapper<vtkCallbackCommand>);
+//vtkAddDestructor(vtkCallbackCommandWrapper);
 
 
 struct Base {
@@ -151,10 +152,14 @@ EMSCRIPTEN_BINDINGS(vtksmartptr_prototype) {
   // TODO: Is the subclass correctly destroyed??
   emscripten::class_<vtkCallbackCommand>("vtkCallbackCommand")
     .constructor(&vtkCallbackCommand::New, emscripten::allow_raw_pointers())
+
+    // virtual void 	SetCallback (void(*f)(vtkObject *caller, unsigned long eid, void *clientdata, void *calldata))
+    
+    .function("SetCallback", &vtkCallbackCommand::SetCallback, emscripten::allow_raw_pointers())
     .allow_subclass<vtkCallbackCommandWrapper>("vtkCallbackCommandWrapper")
-    .constructor(&vtkCallbackCommandWrapper::New, emscripten::allow_raw_pointers())
+    //    .constructor(&vtkCallbackCommandWrapper::New, emscripten::allow_raw_pointers())
     .function("Execute", emscripten::optional_override([](vtkCallbackCommand& self, vtkObject* caller, unsigned long eid, void* callData) {
-        return self.vtkCallbackCommand::Execute(caller, eid, callData);
+      return self.vtkCallbackCommand::Execute(caller, eid, callData);
     }), emscripten::allow_raw_pointers());
   emscripten::class_<vtkObjectBase>("vtkObjectBase");
   emscripten::class_<vtkObject, emscripten::base<vtkObjectBase>>("vtkObject")
